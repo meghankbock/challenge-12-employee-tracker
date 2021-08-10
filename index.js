@@ -1,59 +1,89 @@
 const inquirer = require("inquirer");
 const db = require("./db/connection");
-const org = require("./utils/organization");
+const actions = require("./utils/actions");
+const questions = require("./utils/questions");
+const cTable = require("console.table");
 
-const options = {
-  type: "list",
-  name: "action",
-  message: "What would you like to do?",
-  choices: [
-    "1 - View all Departments",
-    "2 - View all Roles",
-    "3 - View all Employees",
-    "4 - Add a Department",
-    "5 - Add a Role",
-    "6 - Add an Employee",
-    "7 - Update an Employee",
-  ],
-};
+let actionsArray = [];
 
-const startApp = () => {
-    console.log("start app");
-    return inquirer
-    .prompt(options)
-    .then((input) => {
-      menuHandler(input.action);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+actions.forEach((action) => {
+  actionsArray.push(action.name);
+});
+
+const startApp = async () => {
+  const input = await inquirer.prompt(questions.start);
+  menuHandler(input.action);
 };
 
 const menuHandler = (action) => {
-  if (action.charAt(0) === 1) {
-    org.viewAllDepartments();
-  } else if (action.charAt(0) === "2") {
-    org.viewAllRoles();
-  } else if (action.charAt(0) === "3") {
-    org.viewAllEmployees();
-  } else if (action.charAt(0) === "4") {
-    org.addDepartment();
-  } else if (action.charAt(0) === "5") {
-    org.addRole();
-  } else if (action.charAt(0) === "6") {
-    org.addEmployee();
-  } else if (action.charAt(0) === "7") {
-    org.updateEmployee();
+  const id = action.charAt(0);
+  let sql = ``;
+  let title = "";
+  let questions = [];
+  let type = "";
+
+  actions.forEach((item) => {
+    if (item.id == id) {
+      sql = item.query;
+      title = item.title;
+      questions = item.questions;
+      type = item.type;
+    }
+  });
+
+  if (!questions) {
+    sqlQueryNoParams(sql, title);
+  } else if (questions) {
+    userPrompt(sql, title, questions);
   }
+};
+
+const userPrompt = async (sql, title, questions, type) => {
+  const input = await inquirer.prompt(questions);
+  if (type == "department") {
+    const params = [input.name];
+    sqlQueryParams(sql, title, params);
+  }
+};
+
+const sqlQueryParams = (sql, title, params) => {
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      printResult(result, title);
+    });
+};
+
+const sqlQueryNoParams = (sql, title) => {
+      db.query(sql, (err, rows) => {
+        if (err) {
+          console.log(err);
+        }
+        printTable(rows, title);
+      });
+  };
+
+const printTable = (rows, title) => {
+  console.log("\n");
+  console.table(title, rows);
+  console.log("\n");
   return startApp();
 };
 
-startApp();
+const printResult = (result, title) => {
+  console.log("\n");
+  console.log(result);
+  console.log("\n");
+  return startApp();
+};
 
-db.connect(err => {
-    if (err) {
-        console.log(err);
-        throw err;
-    } 
-    console.log('Database connected');
+db.connect((err) => {
+  if (err) {
+    console.log(err);
+    throw err;
+  }
+  console.log("Database connected");
 });
+
+startApp();
