@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const db = require("./db/connection");
+const org = require("./utils/organization");
 
 const options = {
   type: "list",
@@ -30,20 +31,21 @@ const startApp = () => {
 
 const menuHandler = (action) => {
   if (action.charAt(0) === 1) {
-    console.log("option 1");
+    org.viewAllDepartments();
   } else if (action.charAt(0) === "2") {
-    console.log("option 2");
+    org.viewAllRoles();
   } else if (action.charAt(0) === "3") {
-    console.log("option 3");
+    org.viewAllEmployees();
   } else if (action.charAt(0) === "4") {
-    console.log("option 4");
+    org.addDepartment();
   } else if (action.charAt(0) === "5") {
-    console.log("option 5");
+    org.addRole();
   } else if (action.charAt(0) === "6") {
-    console.log("option 6");
+    org.addEmployee();
   } else if (action.charAt(0) === "7") {
-    console.log("option 7");
+    org.updateEmployee();
   }
+  return startApp();
 };
 
 startApp();
