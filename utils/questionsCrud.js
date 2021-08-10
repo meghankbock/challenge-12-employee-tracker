@@ -43,19 +43,21 @@ const getEmployeeList = () => {
   console.log("Employee List: " + employeeList);
 };
 
-const addDepartmentQuestion = {
-  type: "input",
-  name: "name",
-  message: "What is the Department name you are adding?",
-  validate: (nameInput) => {
-    if (nameInput) {
-      return true;
-    } else {
-      console.log("Please provide a Department name.");
-      return false;
-    }
+const addDepartmentQuestion = [
+  {
+    type: "input",
+    name: "name",
+    message: "What is the Department name you are adding?",
+    validate: (nameInput) => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log("Please provide a Department name.");
+        return false;
+      }
+    },
   },
-};
+];
 
 const addRoleQuestion = [
   {
@@ -105,7 +107,7 @@ const addEmployeeQuestion = [
     type: "list",
     name: "action",
     message: "What would you like to do?",
-  }
+  },
 ];
 
 const updateEmployeeQuestion = [
@@ -113,15 +115,24 @@ const updateEmployeeQuestion = [
     type: "list",
     name: "action",
     message: "What would you like to do?",
-  }
+  },
 ];
 
 const deleteDeparmentQuestion = [
-{
-  type: "list",
-  name: "action",
-  message: "What would you like to do?",
-}
+  {
+    type: "list",
+    name: "id",
+    message: "What Department would you like to delete?",
+    choices: departmentList,
+    validate: (idInput) => {
+      if (idInput) {
+        return true;
+      } else {
+        console.log("Please select a Department.");
+        return false;
+      }
+    },
+  },
 ];
 
 const deleteRoleQuestion = [

@@ -53,36 +53,41 @@ const menuHandler = (action) => {
 
 const userPrompt = async (sql, title, questions, type) => {
   let params = [];
+  let roleId;
+  let departmentId;
   const input = await inquirer.prompt(questions);
   if (type == "department") {
-    params = [input.name];
-    sqlQueryParams(sql, title, params, type);
+    if (input.id) {
+      departmentId = (input.id.charAt(0) + input.id.charAt(1)).trim();
+      params = [departmentId];
+    } else {
+      params = [input.name];
+    }
   } else if (type == "role") {
     if (input.id) {
-      let roleId = (input.id.charAt(0) + input.id.charAt(1)).trim();
+      roleId = (input.id.charAt(0) + input.id.charAt(1)).trim();
       params = [roleId];
     } else {
-      let departmentId = (
+      departmentId = (
         input.department.charAt(0) + input.department.charAt(1)
       ).trim();
       params = [input.title, input.salary, departmentId];
     }
-    sqlQueryParams(sql, title, params, type);
   } else if (type == "employee") {
     params = [input.name];
-    sqlQueryParams(sql, title, params, type);
   }
+  sqlQueryParams(sql, title, params, type);
 };
 
 const sqlQueryParams = (sql, title, params, type) => {
-    let id = 0;
+  let id = 0;
   db.query(sql, params, (err, result) => {
     if (err) {
       console.log(err);
-    } else if(result.insertId > 0) {
-        id = result.insertId;
+    } else if (result.insertId > 0) {
+      id = result.insertId;
     } else {
-        id = params[0];
+      id = params[0];
     }
     printResult(id, title, type);
   });
@@ -105,9 +110,9 @@ const printTable = (rows, title, type) => {
 };
 
 const printResult = (id, title, type) => {
-    console.log("\n");
-    console.log(type.toUpperCase() + " with ID " + id + " " + title);
-    console.log("\n");
+  console.log("\n");
+  console.log(type.toUpperCase() + " with ID " + id + " was " + title);
+  console.log("\n");
   return startApp();
 };
 
