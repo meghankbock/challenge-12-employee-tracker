@@ -1,7 +1,8 @@
 const inquirer = require("inquirer");
 const db = require("./db/connection");
 const actions = require("./utils/actions");
-const questions = require("./utils/questions");
+const mainQuestions = require("./utils/questionsMain");
+const crudQuestions = require("./utils/questionsCrud");
 const cTable = require("console.table");
 
 let actionsArray = [];
@@ -11,7 +12,7 @@ actions.forEach((action) => {
 });
 
 const startApp = async () => {
-  const input = await inquirer.prompt(questions.start);
+  const input = await inquirer.prompt(mainQuestions);
   menuHandler(input.action);
 };
 
@@ -43,7 +44,14 @@ const userPrompt = async (sql, title, questions, type) => {
   if (type == "department") {
     const params = [input.name];
     sqlQueryParams(sql, title, params);
+  } else if (type == "role") {
+    const params = [input.name];
+    sqlQueryParams(sql, title, params);
+  } else if (type == "employee") {
+    const params = [input.name];
+    sqlQueryParams(sql, title, params);
   }
+
 };
 
 const sqlQueryParams = (sql, title, params) => {

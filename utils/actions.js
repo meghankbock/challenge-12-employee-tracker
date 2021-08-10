@@ -1,7 +1,7 @@
 const departments = require("./departments");
 const roles = require("./roles");
 const employees = require("./employees");
-const questions = require("./questions");
+const questions = require("./questionsCrud");
 
 const actions = [
     {

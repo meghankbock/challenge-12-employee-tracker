@@ -10,13 +10,11 @@ const updateEmployee = ``;
 
 const deleteEmployee = ``;
 
-const sql = {
-    view: viewAllEmployees,
-    viewByDepartment: viewAllEmployeesByDepartment,
-    viewByManager: viewAllEmployeesByManager,
-    add: addEmployee,
-    update: updateEmployee,
-    delete: deleteEmployee,
+module.exports = {
+    viewAllEmployees, 
+    viewAllEmployeesByDepartment, 
+    viewAllEmployeesByManager, 
+    addEmployee, 
+    updateEmployee, 
+    deleteEmployee
 };
-
-module.exports = {viewAllEmployees, viewAllEmployeesByDepartment, viewAllEmployeesByManager, addEmployee, updateEmployee, deleteEmployee};
