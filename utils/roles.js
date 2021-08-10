@@ -1,8 +1,8 @@
 const viewAllRoles = `SELECT * FROM roles`;
 
-const addRole = `INSERT INTO roles (name) VALUES (?)`;
+const addRole = `INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)`;
 
-const deleteRole = ``;
+const deleteRole = `DELETE FROM roles WHERE id = ?`;
 
 module.exports = {
     viewAllRoles, 
