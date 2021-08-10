@@ -8,25 +8,25 @@ VALUES
 ('Marketing'),
 ('Human Resources');
 
-INSERT INTO roles(title, salary, department)
+INSERT INTO roles(title, salary, department_id)
 VALUES
-('CEO', 250,000.00, 1),
-('CTO', 225,000.00, 1),
-('CFO', 200,000.00, 1),
-('Engineering Team Lead', 150,000.00, 2),
-('Senior Backend Engineer', 125,000.00, 2),
-('Junior Backend Engineer', 100,000.00, 2),
-('UX Team Lead', 150,000.00, 3),
-('UX Designer', 125,000.00, 3),
-('Senior Frontend Developer', 125,000.00, 3),
-('Junior Frontend Developer', 100,000.00, 3),
-('QA Team Lead', 100,000.00, 4),
-('QA Analyst', 75,000.00, 4),
-('Sales Team Lead', 100,000.00, 5),
-('Sales Rep', 75,000.00, 5),
-('Marketing Team Lead', 100,000.00, 6),
-('Marketing Analyst', 75,000.00, 6),
-('HR Team Lead', 75,000.00, 7);
+('CEO', 250000.00, 1),
+('CTO', 225000.00, 1),
+('CFO', 200000.00, 1),
+('Engineering Team Lead', 150000.00, 2),
+('Senior Backend Engineer', 125000.00, 2),
+('Junior Backend Engineer', 100000.00, 2),
+('UX Team Lead', 150000.00, 3),
+('UX Designer', 125000.00, 3),
+('Senior Frontend Developer', 125000.00, 3),
+('Junior Frontend Developer', 100000.00, 3),
+('QA Team Lead', 100000.00, 4),
+('QA Analyst', 75000.00, 4),
+('Sales Team Lead', 100000.00, 5),
+('Sales Rep', 75000.00, 5),
+('Marketing Team Lead', 100000.00, 6),
+('Marketing Analyst', 75000.00, 6),
+('HR Team Lead', 75000.00, 7);
 
 INSERT INTO employees(first_name, last_name, role_id, manager_id)
 VALUES

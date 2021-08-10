@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+const db = require("./db/connection");
 
 const options = {
   type: "list",
@@ -16,7 +17,8 @@ const options = {
 };
 
 const startApp = () => {
-  inquirer
+    console.log("start app");
+    return inquirer
     .prompt(options)
     .then((input) => {
       menuHandler(input.action);
@@ -45,3 +47,11 @@ const menuHandler = (action) => {
 };
 
 startApp();
+
+db.connect(err => {
+    if (err) {
+        console.log(err);
+        throw err;
+    } 
+    console.log('Database connected');
+});
