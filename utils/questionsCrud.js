@@ -33,7 +33,6 @@ const getRoleList = () => {
 };
 
 const getManagerList = () => {
-  console.log("get manager list");
   db.query(employees.viewAllManagers, (err, rows) => {
     if (err) {
       console.log(err);
@@ -55,13 +54,6 @@ const getEmployeeList = () => {
     });
   });
   return employeeList;
-};
-
-const initializeLists = () => {
-  getDepartmentList();
-  getRoleList();
-  getEmployeeList();
-  getManagerList();
 };
 
 const addDepartmentQuestion = [
@@ -278,8 +270,6 @@ const selectManager = [
     },
   }
 ];
-
-initializeLists();
 
 module.exports = {
   addDepartmentQuestion,
