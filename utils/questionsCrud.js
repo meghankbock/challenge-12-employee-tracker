@@ -3,44 +3,47 @@ const departments = require("./departments");
 const roles = require("./roles");
 const employees = require("./employees");
 
-const departmentList = [];
-const roleList = [];
-const employeeList = [];
+let departmentList = [];
+let roleList = [];
+let employeeList = [];
 
 const getDepartmentList = () => {
+  let tempDepartmentList = [];
   db.query(departments.viewAllDepartments, (err, rows) => {
     if (err) {
       console.log(err);
     }
     rows.forEach((row) => {
-      departmentList.push(`${row.id} - ${row.name}`);
+      tempDepartmentList.push(`${row.id} - ${row.name}`);
     });
   });
-  console.log("Dept List: " + departmentList);
+  return departmentList = tempDepartmentList;
 };
 
 const getRoleList = () => {
+  let tempRoleList = [];
   db.query(roles.viewAllRoles, (err, rows) => {
     if (err) {
       console.log(err);
     }
     rows.forEach((row) => {
-      roleList.push(`${row.id} - ${row.title}`);
+      tempRoleList.push(`${row.id} - ${row.title}`);
     });
   });
-  console.log("Role List: " + roleList);
+  return roleList = tempRoleList;
 };
 
 const getEmployeeList = () => {
+  let tempEmployeeList = [];
   db.query(employees.viewAllEmployees, (err, rows) => {
     if (err) {
       console.log(err);
     }
     rows.forEach((row) => {
-      employeeList.push(`${row.id} - ${row.first_name} ${row.last_name}`);
+      tempEmployeeList.push(`${row.id} - ${row.first_name} ${row.last_name}`);
     });
   });
-  console.log("Employee List: " + employeeList);
+  return employeeList = tempEmployeeList;
 };
 
 const addDepartmentQuestion = [
@@ -104,21 +107,76 @@ const addRoleQuestion = [
 
 const addEmployeeQuestion = [
   {
-    type: "list",
-    name: "action",
-    message: "What would you like to do?",
+    type: "input",
+    name: "first_name",
+    message: "What is the Employee's first name?",
+    validate: (nameInput) => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log("Please provide the Employee's first name.");
+        return false;
+      }
+    },
   },
-];
-
-const updateEmployeeQuestion = [
+  {
+    type: "input",
+    name: "last_name",
+    message: "What is the Employee's last name?",
+    validate: (nameInput) => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log("Please provide the Employee's last name.");
+        return false;
+      }
+    },
+  },
   {
     type: "list",
-    name: "action",
-    message: "What would you like to do?",
+    name: "role_id",
+    message: "What is the Employee's Role?",
+    choices: roleList,
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    message: "Who is the Employee's Manager?",
+    choices: employeeList,
   },
 ];
 
-const deleteDeparmentQuestion = [
+const updateEmployeeManagerQuestion = [
+  {
+    type: "list",
+    name: "id",
+    message: "Which Employee do you want to update?",
+    choices: employeeList,
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    message: "Who do you want to update the Employee's Manager to?",
+    choices: employeeList,
+  },
+];
+
+const updateEmployeeRoleQuestion = [
+  {
+    type: "list",
+    name: "id",
+    message: "Which Employee do you want to update?",
+    choices: employeeList,
+  },
+  {
+    type: "list",
+    name: "role_id",
+    message: "What do you want to update the Employee's Role to?",
+    choices: roleList,
+  },
+];
+
+const deleteDepartmentQuestion = [
   {
     type: "list",
     name: "id",
@@ -155,27 +213,58 @@ const deleteRoleQuestion = [
 const deleteEmployeeQuestion = [
   {
     type: "list",
-    name: "action",
-    message: "What would you like to do?",
+    name: "id",
+    message: "What Employee would you like to delete?",
+    choices: employeeList,
+    validate: (idInput) => {
+      if (idInput) {
+        return true;
+      } else {
+        console.log("Please select a Employee.");
+        return false;
+      }
+    },
   },
 ];
 
-const crudQuestions = {
-  addDepartment: addDepartmentQuestion,
-  addRole: addRoleQuestion,
-  addEmployee: addEmployeeQuestion,
-  updateEmployee: updateEmployeeQuestion,
-  deleteDeparment: deleteDeparmentQuestion,
-  deleteRole: deleteRoleQuestion,
-  deleteEmployee: deleteEmployeeQuestion,
-};
-
 const initializeCrudQuestions = () => {
-  getDepartmentList();
-  getRoleList();
-  getEmployeeList();
+    getDepartmentList();
+    getRoleList();
+    getEmployeeList();
 };
 
 initializeCrudQuestions();
 
-module.exports = crudQuestions;
+// const questionArray = {
+//     addDepartment: addDepartmentQuestion,
+//     addRole: addRoleQuestion,
+//     addEmployee: addEmployeeQuestion,
+//     updateEmployeeManager: updateEmployeeManagerQuestion,
+//     updateEmployeeRole: updateEmployeeRoleQuestion,
+//     deleteDepartment: deleteDeparmentQuestion,
+//     deleteRole: deleteRoleQuestion,
+//     deleteEmployee: deleteEmployeeQuestion,
+// };
+
+// const questionArray = [
+//   addDepartmentQuestion,
+//   addRoleQuestion,
+//   addEmployeeQuestion,
+//   updateEmployeeManagerQuestion,
+//   updateEmployeeRoleQuestion,
+//   deleteDeparmentQuestion,
+//   deleteRoleQuestion,
+//   deleteEmployeeQuestion,
+// ];
+
+module.exports = {
+  addDepartmentQuestion,
+  addRoleQuestion,
+  addEmployeeQuestion,
+  updateEmployeeManagerQuestion,
+  updateEmployeeRoleQuestion,
+  deleteDepartmentQuestion,
+  deleteRoleQuestion,
+  deleteEmployeeQuestion,
+  initializeCrudQuestions,
+};

@@ -9,7 +9,7 @@ const actions = [
         name: "1 - View all Departments",
         query: departments.viewAllDepartments,
         title: 'All Departments',
-        questions: '',
+        question: '',
         type: 'department'
     },
     {
@@ -17,7 +17,7 @@ const actions = [
         name: "2 - View all Roles",
         query: roles.viewAllRoles,
         title: 'All Roles',
-        questions: '',
+        question: '',
         type: 'role'
     },
     {
@@ -25,7 +25,7 @@ const actions = [
         name: "3 - View all Employees",
         query: employees.viewAllEmployees,
         title: 'All Employees',
-        questions: '',
+        question: '',
         type: 'employee'
     },
     {
@@ -33,7 +33,7 @@ const actions = [
         name: "4 - View Employees by Manager",
         query: employees.viewAllEmployeesByManager,
         title: 'All Employees by Manager',
-        questions: '',
+        question: '',
         type: 'employee'
     },
     {
@@ -41,7 +41,7 @@ const actions = [
         name: "5 - View Employees by Department",
         query: employees.viewAllEmployeesByDepartment,
         title: 'All Employees by Department',
-        questions: '',
+        question: '',
         type: 'employee'
     },
     {
@@ -49,7 +49,7 @@ const actions = [
         name: "6 - Add a Department",
         query: departments.addDepartment,
         title: 'successfully created.',
-        questions: questions.addDepartment,
+        question: questions.addDepartmentQuestion,
         type: 'department'
     },
     {
@@ -57,7 +57,7 @@ const actions = [
         name: "7 - Add a Role",
         query: roles.addRole,
         title: 'successfully created.',
-        questions: questions.addRole,
+        question: questions.addRoleQuestion,
         type: 'role'
     },
     {
@@ -65,40 +65,56 @@ const actions = [
         name: "8 - Add an Employee",
         query: employees.addEmployee,
         title: 'successfully created.',
-        questions: questions.addEmployee,
+        question: questions.addEmployeeQuestion,
         type: 'employee'
     },
     {
         id: 9,
-        name: "9 - Update an Employee",
-        query: employees.updateEmployee,
+        name: "9 - Update Employee's Role",
+        query: employees.updateEmployeeRole,
         title: 'successfully updated.',
-        questions: questions.updateEmployee,
+        question: questions.updateEmployeeRoleQuestion,
         type: 'employee'
     },
     {
         id: 10,
-        name: "10 - Delete Department",
-        query: departments.deleteDepartment,
-        title: 'successfully deleted.',
-        questions: questions.deleteDeparment,
-        type: 'department'
+        name: "10 - Update Employee's Manager",
+        query: employees.updateEmployeeManager,
+        title: 'successfully updated.',
+        question: questions.updateEmployeeManagerQuestion,
+        type: 'employee'
     },
     {
         id: 11,
-        name: "11 - Delete Role",
-        query: roles.deleteRole,
+        name: "11 - Delete Department",
+        query: departments.deleteDepartment,
         title: 'successfully deleted.',
-        questions: questions.deleteRole,
-        type: 'role'
+        question: questions.deleteDepartmentQuestion,
+        type: 'department'
     },
     {
         id: 12,
-        name: "12 - Delete Employee",
+        name: "12 - Delete Role",
+        query: roles.deleteRole,
+        title: 'successfully deleted.',
+        question: questions.deleteRoleQuestion,
+        type: 'role'
+    },
+    {
+        id: 13,
+        name: "13 - Delete Employee",
         query: employees.deleteEmployee,
         title: 'successfully deleted.',
-        questions: questions.deleteEmployee,
+        question: questions.deleteEmployeeQuestion,
         type: 'employee'
+    },
+    {
+        id: 14,
+        name: "14 - Quit",
+        query: '',
+        title: 'You have successfully closed the program',
+        question: '',
+        type: ''
     },
 ];
 

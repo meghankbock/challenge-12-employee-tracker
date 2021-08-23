@@ -2,7 +2,7 @@ const inquirer = require("inquirer");
 const db = require("./db/connection");
 const actions = require("./utils/actions");
 const mainQuestions = require("./utils/questionsMain");
-const crudQuestions = require("./utils/questionsCrud");
+const crudQuestions = require("./utils/questionsCrud.js");
 const cTable = require("console.table");
 
 let actionsArray = [];
@@ -11,16 +11,13 @@ actions.forEach((action) => {
   actionsArray.push(action.name);
 });
 
-console.log("actionsArray: " + actionsArray);
-
 const startApp = async () => {
   const input = await inquirer.prompt(mainQuestions);
   menuHandler(input.action);
 };
 
 const menuHandler = (action) => {
-  console.log("action id" + action);
-  const id = action.charAt(0) + action.charAt(1).trim();
+  const id = (action.charAt(0) + action.charAt(1)).trim();
   let sql = ``;
   let title = "";
   let question = "";
@@ -30,43 +27,37 @@ const menuHandler = (action) => {
     if (item.id == id) {
       sql = item.query;
       title = item.title;
-      question = item.questions;
-      console.log("question: " + question);
-      //questions.push(item.questions);
+      question = item.question;
       type = item.type;
-      console.log("type: " + type);
-      console.log("title: " + title);
     }
   });
 
-  if (!question) {
-    console.log("sql no params");
+  if (!question && sql) {
     sqlQueryNoParams(sql, title, type);
-  } else {
-    console.log("sql params");
-    console.log("sql: " + sql);
-    console.log("title: " + title);
-    console.log("type: " + type);
+  } else if (question && sql) {
     userPrompt(sql, title, question, type);
+  } else {
+    process.exit();
   }
 };
 
 const userPrompt = async (sql, title, questions, type) => {
   let params = [];
-  let roleId;
+  let id;
   let departmentId;
   const input = await inquirer.prompt(questions);
+  if (input.id) {
+    id = (input.id.charAt(0) + input.id.charAt(1)).trim();
+  }
   if (type == "department") {
-    if (input.id) {
-      departmentId = (input.id.charAt(0) + input.id.charAt(1)).trim();
-      params = [departmentId];
+    if (id) {
+      params = [id];
     } else {
       params = [input.name];
     }
   } else if (type == "role") {
-    if (input.id) {
-      roleId = (input.id.charAt(0) + input.id.charAt(1)).trim();
-      params = [roleId];
+    if (id) {
+      params = [id];
     } else {
       departmentId = (
         input.department.charAt(0) + input.department.charAt(1)
@@ -74,7 +65,19 @@ const userPrompt = async (sql, title, questions, type) => {
       params = [input.title, input.salary, departmentId];
     }
   } else if (type == "employee") {
-    params = [input.name];
+    if (id && input.manager_id) {
+      let managerId = (
+        input.manager_id.charAt(0) + input.manager_id.charAt(1)
+      ).trim();
+      params = [id, managerId];
+    } else if (id && input.role_id) {
+      let managerId = (
+        input.role_id.charAt(0) + input.role_id.charAt(1)
+      ).trim();
+      params = [id, managerId];
+    } else {
+      params = [id];
+    }
   }
   sqlQueryParams(sql, title, params, type);
 };
@@ -106,6 +109,7 @@ const printTable = (rows, title, type) => {
   console.log("\n");
   console.table(title, rows);
   console.log("\n");
+  //crudQuestions.initializeCrudQuestions();
   return startApp();
 };
 
@@ -113,6 +117,7 @@ const printResult = (id, title, type) => {
   console.log("\n");
   console.log(type.toUpperCase() + " with ID " + id + " was " + title);
   console.log("\n");
+  //crudQuestions.initializeCrudQuestions();
   return startApp();
 };
 
@@ -124,4 +129,6 @@ db.connect((err) => {
   console.log("Database connected");
 });
 
+
+crudQuestions.initializeCrudQuestions();
 startApp();
