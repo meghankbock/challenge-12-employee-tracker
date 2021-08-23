@@ -3,23 +3,18 @@ const db = require("./db/connection");
 const actions = require("./utils/actions");
 const mainQuestions = require("./utils/questionsMain");
 const crudQuestions = require("./utils/questionsCrud");
-const cTable = require("console.table");
-
-let actionsArray = [];
-
-actions.forEach((action) => {
-  actionsArray.push(action.name);
-});
-
-console.log("actionsArray: " + actionsArray);
+const consoleTable = require("console.table");
 
 const startApp = async () => {
   const input = await inquirer.prompt(mainQuestions);
-  menuHandler(input.action);
+  if(input) {
+    menuHandler(input.action);
+  } else {
+    alert("promise error");
+  }
 };
 
 const menuHandler = (action) => {
-  console.log("action id" + action);
   const id = action.charAt(0) + action.charAt(1).trim();
   let sql = ``;
   let title = "";
@@ -30,24 +25,17 @@ const menuHandler = (action) => {
     if (item.id == id) {
       sql = item.query;
       title = item.title;
-      question = item.questions;
-      console.log("question: " + question);
-      //questions.push(item.questions);
+      question = item.question;
       type = item.type;
-      console.log("type: " + type);
-      console.log("title: " + title);
     }
   });
 
-  if (!question) {
-    console.log("sql no params");
+  if (!question && sql) {
     sqlQueryNoParams(sql, title, type);
-  } else {
-    console.log("sql params");
-    console.log("sql: " + sql);
-    console.log("title: " + title);
-    console.log("type: " + type);
+  } else if (question && sql) {
     userPrompt(sql, title, question, type);
+  } else {
+    process.exit();
   }
 };
 
@@ -105,23 +93,13 @@ const sqlQueryNoParams = (sql, title, type) => {
 const printTable = (rows, title, type) => {
   console.log("\n");
   console.table(title, rows);
-  console.log("\n");
   return startApp();
 };
 
 const printResult = (id, title, type) => {
   console.log("\n");
   console.log(type.toUpperCase() + " with ID " + id + " was " + title);
-  console.log("\n");
   return startApp();
 };
-
-db.connect((err) => {
-  if (err) {
-    console.log(err);
-    throw err;
-  }
-  console.log("Database connected");
-});
 
 startApp();

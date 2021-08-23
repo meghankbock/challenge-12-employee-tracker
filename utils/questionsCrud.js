@@ -16,7 +16,7 @@ const getDepartmentList = () => {
       departmentList.push(`${row.id} - ${row.name}`);
     });
   });
-  console.log("Dept List: " + departmentList);
+  return departmentList;
 };
 
 const getRoleList = () => {
@@ -28,7 +28,7 @@ const getRoleList = () => {
       roleList.push(`${row.id} - ${row.title}`);
     });
   });
-  console.log("Role List: " + roleList);
+  return roleList;
 };
 
 const getEmployeeList = () => {
@@ -40,7 +40,13 @@ const getEmployeeList = () => {
       employeeList.push(`${row.id} - ${row.first_name} ${row.last_name}`);
     });
   });
-  console.log("Employee List: " + employeeList);
+  return employeeList;
+};
+
+const initializeLists = () => {
+  getDepartmentList();
+  getRoleList();
+  getEmployeeList();
 };
 
 const addDepartmentQuestion = [
@@ -56,7 +62,7 @@ const addDepartmentQuestion = [
         return false;
       }
     },
-  },
+  }
 ];
 
 const addRoleQuestion = [
@@ -71,13 +77,13 @@ const addRoleQuestion = [
         console.log("Please provide a Role title.");
         return false;
       }
-    },
+    }
   },
   {
     type: "list",
     name: "department",
     message: "What Department is this Role in?",
-    choices: departmentList,
+    choices: getDepartmentList(),
     validate: (departmentInput) => {
       if (departmentInput) {
         return true;
@@ -85,7 +91,7 @@ const addRoleQuestion = [
         console.log("Please provide the Role's Department.");
         return false;
       }
-    },
+    }
   },
   {
     type: "number",
@@ -99,31 +105,86 @@ const addRoleQuestion = [
         return false;
       }
     },
-  },
+  }
 ];
 
 const addEmployeeQuestion = [
   {
-    type: "list",
-    name: "action",
-    message: "What would you like to do?",
+    type: "input",
+    name: "first_name",
+    message: "What is the Employee's first name?",
+    validate: (nameInput) => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log("Please provide the Employee's first name.");
+        return false;
+      }
+    },
   },
-];
-
-const updateEmployeeQuestion = [
+  {
+    type: "input",
+    name: "last_name",
+    message: "What is the Employee's last name?",
+    validate: (nameInput) => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log("Please provide the Employee's last name.");
+        return false;
+      }
+    },
+  },
   {
     type: "list",
-    name: "action",
-    message: "What would you like to do?",
+    name: "role_id",
+    message: "What is the Employee's Role?",
+    choices: roleList,
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    message: "Who is the Employee's Manager?",
+    choices: employeeList,
   },
 ];
 
-const deleteDeparmentQuestion = [
+const updateEmployeeManagerQuestion = [
+  {
+    type: "list",
+    name: "id",
+    message: "Which Employee do you want to update?",
+    choices: getEmployeeList(),
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    message: "Who do you want to update the Employee's Manager to?",
+    choices: getEmployeeList(),
+  }
+];
+
+const updateEmployeeRoleQuestion = [
+  {
+    type: "list",
+    name: "id",
+    message: "Which Employee do you want to update?",
+    choices: getEmployeeList(),
+  },
+  {
+    type: "list",
+    name: "role_id",
+    message: "What do you want to update the Employee's Role to?",
+    choices: getRoleList(),
+  }
+];
+
+const deleteDepartmentQuestion = [
   {
     type: "list",
     name: "id",
     message: "What Department would you like to delete?",
-    choices: departmentList,
+    choices: getDepartmentList(),
     validate: (idInput) => {
       if (idInput) {
         return true;
@@ -132,7 +193,7 @@ const deleteDeparmentQuestion = [
         return false;
       }
     },
-  },
+  }
 ];
 
 const deleteRoleQuestion = [
@@ -140,7 +201,7 @@ const deleteRoleQuestion = [
     type: "list",
     name: "id",
     message: "What Role would you like to delete?",
-    choices: roleList,
+    choices: getRoleList(),
     validate: (idInput) => {
       if (idInput) {
         return true;
@@ -149,33 +210,36 @@ const deleteRoleQuestion = [
         return false;
       }
     },
-  },
+  }
 ];
 
 const deleteEmployeeQuestion = [
   {
     type: "list",
-    name: "action",
-    message: "What would you like to do?",
-  },
+    name: "id",
+    message: "What Employee would you like to delete?",
+    choices: getEmployeeList(),
+    validate: (idInput) => {
+      if (idInput) {
+        return true;
+      } else {
+        console.log("Please select a Employee.");
+        return false;
+      }
+    },
+  }
 ];
 
-const crudQuestions = {
-  addDepartment: addDepartmentQuestion,
-  addRole: addRoleQuestion,
-  addEmployee: addEmployeeQuestion,
-  updateEmployee: updateEmployeeQuestion,
-  deleteDeparment: deleteDeparmentQuestion,
-  deleteRole: deleteRoleQuestion,
-  deleteEmployee: deleteEmployeeQuestion,
+initializeLists();
+
+module.exports = {
+  addDepartmentQuestion,
+  addRoleQuestion,
+  addEmployeeQuestion,
+  updateEmployeeManagerQuestion,
+  updateEmployeeRoleQuestion,
+  deleteDepartmentQuestion,
+  deleteRoleQuestion,
+  deleteEmployeeQuestion,
+  initializeLists
 };
-
-const initializeCrudQuestions = () => {
-  getDepartmentList();
-  getRoleList();
-  getEmployeeList();
-};
-
-initializeCrudQuestions();
-
-module.exports = crudQuestions;
