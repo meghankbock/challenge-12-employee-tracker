@@ -7,7 +7,7 @@ const consoleTable = require("console.table");
 
 const startApp = async () => {
   const input = await inquirer.prompt(mainQuestions);
-  if(input) {
+  if (input) {
     menuHandler(input.action);
   } else {
     alert("promise error");
@@ -62,23 +62,48 @@ const userPrompt = async (sql, title, questions, type) => {
       params = [input.title, input.salary, departmentId];
     }
   } else if (type == "employee") {
-    params = [input.name];
+    if (input.manager_id) {
+      managerId = (input.manager_id.charAt(0) + input.manager_id.charAt(1)).trim();
+      params = [managerId];
+    } else if (input.department_id) {
+      departmentId = (input.department_id.charAt(0) + input.department_id.charAt(1)).trim();
+      params = [departmentId];
+    } else {
+      params = [
+        input.first_name,
+        input.last_name,
+        input.role_id,
+        input.manager_id,
+      ];
+    }
   }
   sqlQueryParams(sql, title, params, type);
 };
 
 const sqlQueryParams = (sql, title, params, type) => {
   let id = 0;
-  db.query(sql, params, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else if (result.insertId > 0) {
-      id = result.insertId;
-    } else {
-      id = params[0];
-    }
-    printResult(id, title, type);
-  });
+  if (sql.includes("SELECT")) {
+    console.log("sql: " + sql);
+    db.query(sql, params, (err, rows) => {
+      if (err) {
+        console.log(err);
+        console.log("\nNo results founds\n");
+        return startApp();
+      }
+      printTable(rows, title);
+    });
+  } else {
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else if (result.insertId > 0) {
+        id = result.insertId;
+      } else {
+        id = params[0];
+      }
+      printResult(id, title, type);
+    });
+  }
 };
 
 const sqlQueryNoParams = (sql, title, type) => {
@@ -99,6 +124,7 @@ const printTable = (rows, title, type) => {
 const printResult = (id, title, type) => {
   console.log("\n");
   console.log(type.toUpperCase() + " with ID " + id + " was " + title);
+  console.log("\n");
   return startApp();
 };
 

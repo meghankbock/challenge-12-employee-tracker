@@ -34,7 +34,7 @@ const actions = [
         name: "4 - View Employees by Manager",
         query: employees.viewAllEmployeesByManager,
         title: 'All Employees by Manager',
-        question: '',
+        question: questions.selectManager,
         type: 'employee'
     },
     {
@@ -42,7 +42,7 @@ const actions = [
         name: "5 - View Employees by Department",
         query: employees.viewAllEmployeesByDepartment,
         title: 'All Employees by Department',
-        question: '',
+        question: questions.selectDepartment,
         type: 'employee'
     },
     {

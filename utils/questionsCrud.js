@@ -6,6 +6,7 @@ const employees = require("./employees");
 const departmentList = [];
 const roleList = [];
 const employeeList = [];
+const managerList = [];
 
 const getDepartmentList = () => {
   db.query(departments.viewAllDepartments, (err, rows) => {
@@ -31,6 +32,19 @@ const getRoleList = () => {
   return roleList;
 };
 
+const getManagerList = () => {
+  console.log("get manager list");
+  db.query(employees.viewAllManagers, (err, rows) => {
+    if (err) {
+      console.log(err);
+    }
+    rows.forEach((row) => {
+      managerList.push(`${row.id} - ${row.first_name} ${row.last_name}`);
+    });
+  });
+  return managerList;
+};
+
 const getEmployeeList = () => {
   db.query(employees.viewAllEmployees, (err, rows) => {
     if (err) {
@@ -47,6 +61,7 @@ const initializeLists = () => {
   getDepartmentList();
   getRoleList();
   getEmployeeList();
+  getManagerList();
 };
 
 const addDepartmentQuestion = [
@@ -223,7 +238,41 @@ const deleteEmployeeQuestion = [
       if (idInput) {
         return true;
       } else {
-        console.log("Please select a Employee.");
+        console.log("Please select an Employee.");
+        return false;
+      }
+    },
+  }
+];
+
+const selectDepartment = [
+  {
+    type: "list",
+    name: "department_id",
+    message: "Which Department would you like to see?",
+    choices: getDepartmentList(),
+    validate: (idInput) => {
+      if (idInput) {
+        return true;
+      } else {
+        console.log("Please select a Department.");
+        return false;
+      }
+    },
+  }
+];
+
+const selectManager = [
+  {
+    type: "list",
+    name: "manager_id",
+    message: "Which Manager would you like to see?",
+    choices: getManagerList(),
+    validate: (idInput) => {
+      if (idInput) {
+        return true;
+      } else {
+        console.log("Please select a Manager.");
         return false;
       }
     },
@@ -241,5 +290,7 @@ module.exports = {
   deleteDepartmentQuestion,
   deleteRoleQuestion,
   deleteEmployeeQuestion,
+  selectDepartment,
+  selectManager,
   initializeLists
 };
