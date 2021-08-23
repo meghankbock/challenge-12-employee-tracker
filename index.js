@@ -83,14 +83,16 @@ const userPrompt = async (sql, title, questions, type) => {
 const sqlQueryParams = (sql, title, params, type) => {
   let id = 0;
   if (sql.includes("SELECT")) {
-    console.log("sql: " + sql);
     db.query(sql, params, (err, rows) => {
       if (err) {
         console.log(err);
+      }
+      if (rows.length == 0) {
         console.log("\nNo results founds\n");
         return startApp();
-      }
+      } else {
       printTable(rows, title);
+      }
     });
   } else {
     db.query(sql, params, (err, result) => {

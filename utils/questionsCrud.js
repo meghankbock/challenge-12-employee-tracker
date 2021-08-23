@@ -281,6 +281,5 @@ module.exports = {
   deleteRoleQuestion,
   deleteEmployeeQuestion,
   selectDepartment,
-  selectManager,
-  initializeLists
+  selectManager
 };
