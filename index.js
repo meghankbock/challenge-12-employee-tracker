@@ -49,30 +49,38 @@ const userPrompt = async (sql, title, questions, type) => {
   if (type == "department") {
     if (input.id) {
       departmentId = (input.id.charAt(0) + input.id.charAt(1)).trim();
-      params = [departmentId];
+      params = [departmentId]; // delete department
     } else {
-      params = [input.name];
+      params = [input.name]; // add department
     }
   } else if (type == "role") {
     if (input.id) {
       roleId = (input.id.charAt(0) + input.id.charAt(1)).trim();
-      params = [roleId];
+      params = [roleId]; // delete role
     } else {
       departmentId = (
         input.department.charAt(0) + input.department.charAt(1)
       ).trim();
-      params = [input.title, input.salary, departmentId];
+      params = [input.title, input.salary, departmentId]; // add role
     }
   } else if (type == "employee") {
-    if (input.manager_id && !input.first_name && !input.last_name && !input.role_id) {
+    if (input.manager_id && !input.first_name && !input.last_name && !input.role_id && !input.id) {
       managerId = (input.manager_id.charAt(0) + input.manager_id.charAt(1)).trim();
-      params = [managerId];
-    } else if (input.department_id) {
+      params = [managerId]; // search by manager
+    } else if (input.department_id && !input.id) {
       departmentId = (input.department_id.charAt(0) + input.department_id.charAt(1)).trim();
-      params = [departmentId];
+      params = [departmentId]; // search by department
+    } else if (input.role_id && input.id) {
+      employeeId = (input.id.charAt(0) + input.id.charAt(1)).trim();
+      roleId = (input.role_id.charAt(0) + input.role_id.charAt(1)).trim();
+      params = [roleId, employeeId]; // update role
+    } else if (input.manager_id && input.id) {
+      employeeId = (input.id.charAt(0) + input.id.charAt(1)).trim();
+      managerId = (input.manager_id.charAt(0) + input.manager_id.charAt(1)).trim();
+      params = [managerId, employeeId]; // update manager
     } else if (input.id) {
         employeeId = (input.id.charAt(0) + input.id.charAt(1)).trim();
-        params = [employeeId];
+        params = [employeeId]; // delete employee
     } else {
       managerId = (input.manager_id.charAt(0) + input.manager_id.charAt(1)).trim();
       roleId = (input.role_id.charAt(0) + input.role_id.charAt(1)).trim();
@@ -81,7 +89,7 @@ const userPrompt = async (sql, title, questions, type) => {
         input.last_name,
         roleId,
         managerId,
-      ];
+      ]; // add employee
     }
   }
   sqlQueryParams(sql, title, params, type);
