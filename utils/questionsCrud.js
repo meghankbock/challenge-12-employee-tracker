@@ -146,13 +146,13 @@ const addEmployeeQuestion = [
     type: "list",
     name: "role_id",
     message: "What is the Employee's Role?",
-    choices: roleList,
+    choices: getRoleList(),
   },
   {
     type: "list",
     name: "manager_id",
     message: "Who is the Employee's Manager?",
-    choices: employeeList,
+    choices: getManagerList(),
   },
 ];
 

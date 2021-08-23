@@ -43,6 +43,8 @@ const userPrompt = async (sql, title, questions, type) => {
   let params = [];
   let roleId;
   let departmentId;
+  let managerId;
+  let employeeId;
   const input = await inquirer.prompt(questions);
   if (type == "department") {
     if (input.id) {
@@ -62,18 +64,23 @@ const userPrompt = async (sql, title, questions, type) => {
       params = [input.title, input.salary, departmentId];
     }
   } else if (type == "employee") {
-    if (input.manager_id) {
+    if (input.manager_id && !input.first_name && !input.last_name && !input.role_id) {
       managerId = (input.manager_id.charAt(0) + input.manager_id.charAt(1)).trim();
       params = [managerId];
     } else if (input.department_id) {
       departmentId = (input.department_id.charAt(0) + input.department_id.charAt(1)).trim();
       params = [departmentId];
+    } else if (input.id) {
+        employeeId = (input.id.charAt(0) + input.id.charAt(1)).trim();
+        params = [employeeId];
     } else {
+      managerId = (input.manager_id.charAt(0) + input.manager_id.charAt(1)).trim();
+      roleId = (input.role_id.charAt(0) + input.role_id.charAt(1)).trim();
       params = [
         input.first_name,
         input.last_name,
-        input.role_id,
-        input.manager_id,
+        roleId,
+        managerId,
       ];
     }
   }
