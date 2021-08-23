@@ -1,5 +1,5 @@
-const viewAllRoles = `SELECT role.id, role.title, role.salary, dept.name 
-                        AS department
+const viewAllRoles = `SELECT role.id, role.title, role.salary, dept.name AS department,
+                        (SELECT COUNT(*) FROM employees employee WHERE employee.role_id = role.id) employee_count
                         FROM roles role
                         LEFT JOIN departments dept on dept.id = role.department_id
                         ORDER BY role.id`;
